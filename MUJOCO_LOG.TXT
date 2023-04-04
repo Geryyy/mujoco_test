@@ -1,0 +1,16 @@
+Tue Apr  4 16:51:49 2023
+ERROR: Load model error: Error: material 'matplane' not found in geom 0
+Object name = ground, id = 0, line = 36, column = -1
+
+Tue Apr  4 16:52:37 2023
+ERROR: Load model error: Error: texture 'texplane' not found in material 0
+Object name = matplane, id = 0, line = 31, column = -1
+
+Tue Apr  4 16:52:54 2023
+ERROR: Load model error: Error: material 'matplane' not found in geom 0
+Object name = ground, id = 0, line = 39, column = -1
+
+Tue Apr  4 16:54:54 2023
+ERROR: Load model error: Error: could not open STL file 'asset/meshes/link_0.stl'
+Object name = link_0, id = 0, line = 21, column = -1
+
