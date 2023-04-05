@@ -54,18 +54,26 @@ include(SampleDependencies)
 set(MUJOCO_SAMPLE_COMPILE_OPTIONS "${AVX_COMPILE_OPTIONS}" "${EXTRA_COMPILE_OPTIONS}")
 set(MUJOCO_SAMPLE_LINK_OPTIONS "${EXTRA_LINK_OPTIONS}")
 
-if(MUJOCO_HARDEN)
-  if(WIN32)
-    set(MUJOCO_SAMPLE_LINK_OPTIONS "${MUJOCO_SAMPLE_LINK_OPTIONS}" -Wl,/DYNAMICBASE)
-  else()
-    set(MUJOCO_SAMPLE_COMPILE_OPTIONS "${MUJOCO_SAMPLE_COMPILE_OPTIONS}" -fPIE)
-    if(APPLE)
-      set(MUJOCO_SAMPLE_LINK_OPTIONS "${MUJOCO_SAMPLE_LINK_OPTIONS}" -Wl,-pie)
-    else()
-      set(MUJOCO_SAMPLE_LINK_OPTIONS "${MUJOCO_SAMPLE_LINK_OPTIONS}" -pie)
-    endif()
-  endif()
-endif()
+# if(MUJOCO_HARDEN)
+#   if(WIN32)
+#     set(MUJOCO_SAMPLE_LINK_OPTIONS "${MUJOCO_SAMPLE_LINK_OPTIONS}" -Wl,/DYNAMICBASE)
+#   else()
+#     set(MUJOCO_SAMPLE_COMPILE_OPTIONS "${MUJOCO_SAMPLE_COMPILE_OPTIONS}" -fPIE)
+#     if(APPLE)
+#       set(MUJOCO_SAMPLE_LINK_OPTIONS "${MUJOCO_SAMPLE_LINK_OPTIONS}" -Wl,-pie)
+#     else()
+#       set(MUJOCO_SAMPLE_LINK_OPTIONS "${MUJOCO_SAMPLE_LINK_OPTIONS}" -pie)
+#     endif()
+#   endif()
+# endif()
+
+
+find_package(arc_lib REQUIRED)
+include_directories(${arc_lib_INCLUDE_DIRS})
+link_directories(${arc_lib_LIBRARY_DIRS})
+
+find_package(Eigen3 3.4.0 REQUIRED NO_MODULE)
+include_directories(${EIGEN3_INCLUDE_DIR})
 
 # Build sample binaries
 # add_executable(compile compile.cc)
@@ -102,6 +110,8 @@ target_link_libraries(
   mujoco::mujoco
   glfw
   Threads::Threads
+  Eigen3::Eigen
+  ${arc_lib_LIBRARIES}
 )
 target_link_options(basic PRIVATE ${MUJOCO_SAMPLE_LINK_OPTIONS})
 

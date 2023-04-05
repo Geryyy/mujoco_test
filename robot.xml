@@ -6,6 +6,10 @@
 
     <option timestep="0.005" jacobian="sparse"/>
 
+    <keyframe>
+        <key time="0" qpos="0 0 0 0 0 0 0" />
+    </keyframe>
+
 
     <!-- Physical limits of the actuator. -->
     <!-- Values taken from kuka_lbr_iiwa_brochure_en.pdf (see website) -->
