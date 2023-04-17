@@ -67,10 +67,15 @@ set(MUJOCO_SAMPLE_LINK_OPTIONS "${EXTRA_LINK_OPTIONS}")
 #   endif()
 # endif()
 
+set(ARC_PATH lib)
+include_directories(${ARC_PATH}/include)
 
-find_package(arc_lib REQUIRED)
-include_directories(${arc_lib_INCLUDE_DIRS})
-link_directories(${arc_lib_LIBRARY_DIRS})
+# write cwd message
+message(STATUS "CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
+
+# find_package(arc_lib REQUIRED)
+# include_directories(${arc_lib_INCLUDE_DIRS})
+# link_directories(${arc_lib_LIBRARY_DIRS})
 
 find_package(Eigen3 3.4.0 REQUIRED NO_MODULE)
 include_directories(${EIGEN3_INCLUDE_DIR})
@@ -103,7 +108,20 @@ include_directories(${EIGEN3_INCLUDE_DIR})
 
 # Build samples that require GLFW.
 
-add_executable(basic basic.cc)
+add_executable(basic basic.cc
+${ARC_PATH}/src/Robots/LBRIiwa/evalC.cpp
+${ARC_PATH}/src/Robots/LBRIiwa/evalG.cpp
+${ARC_PATH}/src/Robots/LBRIiwa/evalJ.cpp
+${ARC_PATH}/src/Robots/LBRIiwa/evalJp.cpp
+${ARC_PATH}/src/Robots/LBRIiwa/evalJpp.cpp
+${ARC_PATH}/src/Robots/LBRIiwa/evalM.cpp
+${ARC_PATH}/src/Robots/LBRIiwa/evalT0E.cpp
+${ARC_PATH}/src/Robots/LBRIiwa/evalT0i.cpp
+${ARC_PATH}/src/Robots/LBRIiwa/evalT0i.cpp
+${ARC_PATH}/src/Logger.cpp
+${ARC_PATH}/src/Skew.cpp
+${ARC_PATH}/src/quatutil.cpp
+)
 target_compile_options(basic PUBLIC ${MUJOCO_SAMPLE_COMPILE_OPTIONS})
 target_link_libraries(
   basic
@@ -111,7 +129,7 @@ target_link_libraries(
   glfw
   Threads::Threads
   Eigen3::Eigen
-  ${arc_lib_LIBRARIES}
+  # ${arc_lib_LIBRARIES}
 )
 target_link_options(basic PRIVATE ${MUJOCO_SAMPLE_LINK_OPTIONS})
 

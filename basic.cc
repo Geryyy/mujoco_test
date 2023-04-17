@@ -203,7 +203,7 @@ int main(int argc, const char **argv)
   // std::cout << "duration: " << duration_ms.count() << " milliseconds" << std::endl;
 
   /*** setup arc ***/
-  joint_init_pos = JointVector::Zero();
+  joint_init_pos = JointVector::Ones();
   double Ts = m->opt.timestep;
 
   using namespace arc::Robots;
@@ -238,13 +238,13 @@ int main(int argc, const char **argv)
   arc_contr_ptr->init(m_ee, cog_ee_x, cog_ee_y, cog_ee_z);
 
   arc::log::write_info("Init TrajectoryServer");
-  // com_server = std::make_unique<TrajectoryServer>(arc_contr_ptr, server_port, client_port);
+  // auto com_server = std::make_unique<TrajectoryServer>(arc_contr_ptr, server_port, client_port);
   arc::log::write_info("Finished loading ARC Plugin.");
 
 
 
   JointVector q_act = Eigen::Map<JointVector>(d->qpos);
-  double T_traj = 1;
+  double T_traj = 3;
   arc_contr_ptr->start(d->time, q_act, joint_init_pos, T_traj);
 
   // JointVector q_act;
@@ -267,17 +267,17 @@ int main(int argc, const char **argv)
       mj_step(m, d);
 
       // copy qpos to q_act
-      // for(int i=0;i<q_act.size();i++)
-      // {
-      //   q_act[i] = d->qpos[i];
-      // }
-      std::cout<<"entering update\r"<<std::endl;
-      tau_set = arc_contr_ptr->update(0, q_act, tau_sens_act, tau_motor_act, false);
+      for(int i=0;i<q_act.size();i++)
+      {
+        q_act[i] = d->qpos[i];
+      }
+      // std::cout<<"entering update\r"<<std::endl;
+      tau_set = arc_contr_ptr->update(d->time, q_act, tau_sens_act, tau_motor_act, false);
       tau_sens_act = tau_set;
-      // for(int i=0;i<tau_set.size();i++)
-      // {
-      //   d->ctrl[i] = tau_set[i];
-      // }
+      for(int i=0;i<tau_set.size();i++)
+      {
+        d->ctrl[i] = tau_set[i];
+      }
 
     }
 
